@@ -1,2 +1,9 @@
 *.class
 *.log
+*.bsp
+*.DS_Store
+*.idea
+**/test
+**/target
+**/*Credential*
+**/*Queries*
