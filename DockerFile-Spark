@@ -1,0 +1,30 @@
+
+FROM apache-spark
+# Apache spark environment
+
+WORKDIR ${SPARK_HOME}
+
+COPY ./sqljdbc42.jar /usr/share/java/
+
+ENV SPARK_MASTER_PORT=7077 \
+SPARK_MASTER_WEBUI_PORT=8080 \
+SPARK_LOG_DIR=${SPARK_HOME}/logs \
+SPARK_MASTER_LOG=${SPARK_HOME}/logs/master.out \
+SPARK_WORKER_LOG=${SPARK_HOME}/logs/worker.out \
+SPARK_WORKER_WEBUI_PORT=8080 \
+SPARK_MASTER="spark://master:7077" \
+SPARK_WORKLOAD="master" \
+SPARK_BIN="${SPARK_HOME}/bin/" \
+PATH="${PATH}:${SPARK_HOME}/bin/"
+
+EXPOSE 8080 7077 6066
+
+RUN mkdir -p $SPARK_LOG_DIR && \
+touch $SPARK_MASTER_LOG && \
+touch $SPARK_WORKER_LOG && \
+ln -sf /dev/stdout $SPARK_MASTER_LOG && \
+ln -sf /dev/stdout $SPARK_WORKER_LOG
+
+COPY start-spark.sh /
+
+CMD ["/bin/bash", "/start-spark.sh"]

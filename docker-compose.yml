@@ -1,0 +1,68 @@
+version: "3.3"
+
+#https://github.com/mvillarrealb/docker-spark-cluster/blob/master/articles/docker-compose.md
+services:
+  #MASTER node
+  master:
+    build: 
+      context: .
+      dockerfile: DockerFile-Spark
+    image: cluster-apache-spark:3.1.2
+    ports:
+      - 9090:8080
+      - 7077:7077
+    volumes:
+       - ./apps:/opt/spark-apps
+       - ./data:/opt/spark-data
+       - .:/home/shangupta
+    environment:
+      - SPARK_LOCAL_IP=master #hostname/ip - This is the service name of docker-compose lne 6
+      - SPARK_WORKLOAD=master #hostname/ip - This is the service name of docker-compose lne 6
+
+  # WORKER Node 1
+  worker-a:
+    image: cluster-apache-spark:3.1.2
+    ports:
+      - 9091:8080
+      - 7000:7000
+    depends_on:
+      - master
+    environment:
+      - SPARK_MASTER=spark://master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_MEMORY=1G
+      - SPARK_EXECUTOR_MEMORY=1G
+      - SPARK_WORKLOAD=worker #hostname/ip - This is the service name of docker-compose lne 23
+      - SPARK_LOCAL_IP=worker-a #hostname/ip - This is the service name of docker-compose lne 23
+    volumes:
+       - ./apps:/opt/spark-apps
+       - ./data:/opt/spark-data
+       - .:/home/shangupta
+
+  # WORKER Node 2
+  worker-b:
+    image: cluster-apache-spark:3.1.2
+    ports:
+      - 9092:8080
+      - 7001:7000
+    depends_on:
+      - master
+    environment:
+      - SPARK_MASTER=spark://master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_MEMORY=1G
+      - SPARK_EXECUTOR_MEMORY=1G
+      - SPARK_WORKLOAD=worker #hostname/ip - This is the service name of docker-compose lne 44
+      - SPARK_LOCAL_IP=worker-b #hostname/ip - This is the service name of docker-compose lne 44
+    volumes:
+        - ./apps:/opt/spark-apps
+        - ./data:/opt/spark-data
+        - .:/home/shangupta
+  # demo-database:
+  #   image: postgres:11.7-alpine
+  #   ports: 
+  #     - 5432:5432
+  #   environment: 
+  #     - POSTGRES_PASSWORD=casa1234
