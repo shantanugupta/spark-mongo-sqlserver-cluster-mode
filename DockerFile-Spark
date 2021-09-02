@@ -4,7 +4,7 @@ FROM apache-spark
 
 WORKDIR ${SPARK_HOME}
 
-COPY ./sqljdbc42.jar /usr/share/java/
+#COPY ./sqljdbc42.jar /usr/share/java/
 
 ENV SPARK_LOG_DIR=${SPARK_HOME}/logs \
 SPARK_MASTER_LOG=${SPARK_HOME}/logs/master.out \
@@ -12,7 +12,7 @@ SPARK_WORKER_LOG=${SPARK_HOME}/logs/worker.out \
 SPARK_BIN="${SPARK_HOME}/bin/" \
 PATH="${PATH}:${SPARK_HOME}/bin/"
 
-EXPOSE 8080 7077 6066
+EXPOSE 8080 8081 7077 7070 8000-8003
 
 RUN mkdir -p $SPARK_LOG_DIR && \
 touch $SPARK_MASTER_LOG && \

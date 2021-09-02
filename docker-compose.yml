@@ -11,10 +11,12 @@ services:
     ports:
       - ${spar_master_webui_port}:${spar_master_webui_port}
       - ${spark_master_port}:${spark_master_port}
+      - 8081:8081
     volumes:
        - ./apps:/opt/spark-apps
        - ./data:/opt/spark-data
        - .:/home/shangupta
+       - ./out/artifacts/sql_mongo_validation_jar:/home/jars
     environment:
       - SPARK_WORKLOAD=master
       - SPARK_MASTER_WEBUI_PORT=${spar_master_webui_port}
@@ -31,7 +33,6 @@ services:
     container_name: ${spark_worker_1}
     ports:
       - ${spar_worker_1_webui_port}:${spar_worker_1_webui_port}
-      - 7000:7000
     depends_on:
       - master
     environment:
@@ -48,6 +49,7 @@ services:
        - ./apps:/opt/spark-apps
        - ./data:/opt/spark-data
        - .:/home/shangupta
+       - ./out/artifacts/sql_mongo_validation_jar:/home/jars
     networks:
       - spark-network
 
@@ -57,7 +59,6 @@ services:
     container_name: ${spark_worker_2}
     ports:
       - ${spar_worker_2_webui_port}:${spar_worker_2_webui_port}
-      - 7001:7000
     depends_on:
       - master
     environment:
@@ -74,6 +75,7 @@ services:
         - ./apps:/opt/spark-apps
         - ./data:/opt/spark-data
         - .:/home/shangupta
+        - ./out/artifacts/sql_mongo_validation_jar:/home/jars
     networks:
       - spark-network
 

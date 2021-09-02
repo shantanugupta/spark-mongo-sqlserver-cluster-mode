@@ -12,20 +12,20 @@ This newly built image will be named `image: cluster-apache-spark:3.1.2` as it's
 Once we are all set for spark cluster, we can work on scala projects to submit jobs.
 
 ####URL for accessing UI of Spark nodes:####
-1. Master node:`http://localhost:8080`
-2. Worker-Node-1: `http://localhost:8081`
-3. Worker-Node-2: `http://localhost:8082`
+1. Master node:`http://localhost:8000`
+2. Worker-Node-1: `http://localhost:8001`
+3. Worker-Node-2: `http://localhost:8002`
 
 Optionally you can make an entry into `/etc/hosts` file to replace localhost names with corresponding node names
 
 Here is an example of my host file
-``` 
+```shell
 127.0.0.1	master-node
 127.0.0.1	worker-node-1 
 127.0.0.1	worker-node-2
 ```
 Same URL can be accessed using node names used in [docker-compose.yml](/docker-compose.yml) via [.env](/.env) file:
 
-1. Master node: [`http://master-node:8080`](`http://master-node:8080`)
-3. Worker-Node-1: [`http://worker-node-1:8081`](`http://worker-node-1:8081`)
-2. Worker-Node-2: [`http://worker-node-2:8081`](`http://worker-node-2:8082`)
+1. Master node: [`http://master-node:8000`](`http://master-node:8000`)
+3. Worker-Node-1: [`http://worker-node-1:8001`](`http://worker-node-1:8001`)
+2. Worker-Node-2: [`http://worker-node-2:8002`](`http://worker-node-2:8002`)
