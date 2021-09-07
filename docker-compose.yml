@@ -7,78 +7,107 @@ services:
       context: .
       dockerfile: DockerFile-Spark
     image: cluster-apache-spark:3.1.2
-    container_name: ${spark_master}
+    container_name: $spark_master
     ports:
-      - ${spar_master_webui_port}:${spar_master_webui_port}
-      - ${spark_master_port}:${spark_master_port}
+      - $spar_master_webui_port:$spar_master_webui_port
+      - $spark_master_port:$spark_master_port
       - 8081:8081
+      - 4000:4040
     volumes:
        - ./apps:/opt/spark-apps
        - ./data:/opt/spark-data
        - .:/home/shangupta
-       - ./out/artifacts/sql_mongo_validation_jar:/home/jars
+       - /etc/timezone:/etc/timezone:ro   # set timezone of docker container equal to host timezone
+       - /etc/localtime:/etc/localtime:ro
     environment:
       - SPARK_WORKLOAD=master
-      - SPARK_MASTER_WEBUI_PORT=${spar_master_webui_port}
-      - SPARK_MASTER_PORT=${spark_master_port}
-      - SPARK_MASTER=spark://${spark_master}:${spark_master_port}
-      - SPARK_LOCAL_IP=${spark_master} #hostname/ip - from .env file
-      - SPARK_PUBLIC_DNS=${spark_master}  #hostname/ip - from .env file
+      - SPARK_MASTER_WEBUI_PORT=$spar_master_webui_port
+      - SPARK_MASTER_PORT=$spark_master_port
+      - SPARK_MASTER=spark://$spark_master:$spark_master_port
+      - SPARK_LOCAL_IP=$spark_master  #$spark_master #hostname/ip - from .env file
+      - SPARK_PUBLIC_DNS=$spark_master  #hostname/ip - from .env file
     networks:
       - spark-network
 
   # WORKER Node 1
   worker-a:
     image: cluster-apache-spark:3.1.2
-    container_name: ${spark_worker_1}
+    container_name: $spark_worker_1
     ports:
-      - ${spar_worker_1_webui_port}:${spar_worker_1_webui_port}
+      - $spar_worker_1_webui_port:$spar_worker_1_webui_port
+      - 4001:4040
     depends_on:
       - master
     environment:
-      - SPARK_MASTER=spark://${spark_master}:${spark_master_port}
-      - SPARK_WORKER_CORES=1
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_DRIVER_MEMORY=1G
-      - SPARK_EXECUTOR_MEMORY=1G
+      - SPARK_MASTER=spark://$spark_master:$spark_master_port
       - SPARK_WORKLOAD=worker
-      - SPARK_WORKER_WEBUI_PORT=${spar_worker_1_webui_port}
-      - SPARK_LOCAL_IP=${spark_worker_1} #hostname/ip - from .env file
-      - SPARK_PUBLIC_DNS=${spark_worker_1} #hostname/ip - from .env file
+      - SPARK_WORKER_WEBUI_PORT=$spar_worker_1_webui_port
+      - SPARK_LOCAL_IP=$spark_worker_1 #hostname/ip - from .env file
+      - SPARK_PUBLIC_DNS=$spark_worker_1 #hostname/ip - from .env file
     volumes:
        - ./apps:/opt/spark-apps
        - ./data:/opt/spark-data
        - .:/home/shangupta
-       - ./out/artifacts/sql_mongo_validation_jar:/home/jars
+       - /etc/timezone:/etc/timezone:ro   # set timezone of docker container equal to host timezone
+       - /etc/localtime:/etc/localtime:ro
     networks:
       - spark-network
 
   # WORKER Node 2
   worker-b:
     image: cluster-apache-spark:3.1.2
-    container_name: ${spark_worker_2}
+    container_name: $spark_worker_2
     ports:
-      - ${spar_worker_2_webui_port}:${spar_worker_2_webui_port}
+      - $spar_worker_2_webui_port:$spar_worker_2_webui_port
+      - 4002:4040
     depends_on:
       - master
     environment:
-      - SPARK_MASTER=spark://${spark_master}:${spark_master_port}
-      - SPARK_WORKER_CORES=1
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_DRIVER_MEMORY=1G
-      - SPARK_EXECUTOR_MEMORY=1G
+      - SPARK_MASTER=spark://$spark_master:$spark_master_port
+#      - SPARK_WORKER_CORES=1
+#      - SPARK_WORKER_MEMORY=1G
+#      - SPARK_DRIVER_MEMORY=1G
+#      - SPARK_EXECUTOR_MEMORY=1G
       - SPARK_WORKLOAD=worker
-      - SPARK_WORKER_WEBUI_PORT=${spar_worker_2_webui_port}
-      - SPARK_LOCAL_IP=${spark_worker_2} #hostname/ip - from .env file
-      - SPARK_PUBLIC_DNS=${spark_worker_2} #hostname/ip - from .env file
+      - SPARK_WORKER_WEBUI_PORT=$spar_worker_2_webui_port
+      - SPARK_LOCAL_IP=$spark_worker_2 #hostname/ip - from .env file
+      - SPARK_PUBLIC_DNS=$spark_worker_2 #hostname/ip - from .env file
     volumes:
         - ./apps:/opt/spark-apps
         - ./data:/opt/spark-data
         - .:/home/shangupta
-        - ./out/artifacts/sql_mongo_validation_jar:/home/jars
+        - /etc/timezone:/etc/timezone:ro   # set timezone of docker container equal to host timezone
+        - /etc/localtime:/etc/localtime:ro
     networks:
       - spark-network
 
+  # WORKER Node 3
+  worker-c:
+    image: cluster-apache-spark:3.1.2
+    container_name: $spark_worker_3
+    ports:
+      - $spar_worker_3_webui_port:$spar_worker_3_webui_port
+      - 4003:4040
+    depends_on:
+      - master
+    environment:
+      - SPARK_MASTER=spark://$spark_master:$spark_master_port
+#      - SPARK_WORKER_CORES=1
+#      - SPARK_WORKER_MEMORY=1G
+#      - SPARK_DRIVER_MEMORY=1G
+#      - SPARK_EXECUTOR_MEMORY=1G
+      - SPARK_WORKLOAD=worker
+      - SPARK_WORKER_WEBUI_PORT=$spar_worker_3_webui_port
+      - SPARK_LOCAL_IP=$spark_worker_3 #hostname/ip - from .env file
+      - SPARK_PUBLIC_DNS=$spark_worker_3 #hostname/ip - from .env file
+    volumes:
+      - ./apps:/opt/spark-apps
+      - ./data:/opt/spark-data
+      - .:/home/shangupta
+      - /etc/timezone:/etc/timezone:ro   # set timezone of docker container equal to host timezone
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - spark-network
   # demo-database:
   #   image: postgres:11.7-alpine
   #   ports: 
