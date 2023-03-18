@@ -5,6 +5,10 @@ This project helps setting-up spark cluster in standalone mode on macwindows ins
 
 [Here](https://towardsdatascience.com/apache-spark-cluster-on-docker-ft-a-juyterlab-interface-418383c95445) is the referenced article used to create the same: 
 
+Please ensure before starting on latest versions of docker. Buildkit property must be set to false
+
+![buildkit property must be set to false](https://imgur.com/a/vvAzR51)
+
 #### Next Steps
 We are going to perform a join between MongoDB collection and table in SQL Server. Data from both of the sources will be pulled into Spark cluster locally and then the join will be performed by Spark.
 
