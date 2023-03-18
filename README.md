@@ -16,11 +16,11 @@ Spark Cluster setup process has been broken down into two steps
    build.bat
    ```
 
-####URL for accessing UI of Spark nodes:####
+#### URL for accessing UI of Spark nodes: ####
 1. JupyterLab at [localhost:8888](http://localhost:8888);
-2. Spark master at [localhost:8080](localhost:8080);
-3. Spark worker I at [localhost:8081](localhost:8081);
-4. Spark worker II at [localhost:8082](localhost:8082);
+2. Spark master at [localhost:8080](http://localhost:8080);
+3. Spark worker I at [localhost:8081](http://localhost:8081);
+4. Spark worker II at [localhost:8082](http://localhost:8082);
 
 Optionally you can make an entry into `/etc/hosts` file to replace localhost names with corresponding node names
 
@@ -38,3 +38,21 @@ spark-submit \
  --master "spark://master-node:7077" \
  target/scala-2.12/sql-mongo-validation-assembly-0.1.jar
  ```
+
+### Pyspark notebook ###
+Open the notebook JupyterLab at [localhost:8888](http://localhost:8888) and paste the below code to see Jupyter in action
+```
+from pyspark.sql import SparkSession
+spark = SparkSession.\
+        builder.\
+        appName("pyspark-notebook").\
+        master("spark://spark-master:7077").\
+        config("spark.executor.memory", "512m").\
+        getOrCreate()
+
+import wget
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+wget.download(url)
+data = spark.read.csv("iris.data")
+data.show(n=5)
+```
