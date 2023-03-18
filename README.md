@@ -7,7 +7,7 @@ This project helps setting-up spark cluster in standalone mode on macwindows ins
 
 Please ensure before starting on latest versions of docker. Buildkit property must be set to false
 
-![buildkit property must be set to false](https://imgur.com/a/vvAzR51)
+![buildkit property must be set to false](https://i.imgur.com/Vvbuoqw.png)
 
 #### Next Steps
 We are going to perform a join between MongoDB collection and table in SQL Server. Data from both of the sources will be pulled into Spark cluster locally and then the join will be performed by Spark.
